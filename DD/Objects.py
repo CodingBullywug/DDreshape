@@ -20,6 +20,9 @@ class Object(Entity):
     def pad(self, top, bottom, left, right):
         self.position += np.asarray([left*self._scale, top*self._scale])
 
+    def crop(self, top, bottom, left, right):
+        self.position -= np.asarray([left*self._scale, top*self._scale])
+
     def fliplr(self, width):
         self.rotation = np.pi - self.rotation
         self.scale[1] = -1*self.scale[1]

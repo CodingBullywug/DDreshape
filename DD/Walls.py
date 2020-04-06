@@ -22,6 +22,10 @@ class Wall(Entity):
         self.points += np.asarray([left*self._scale, top*self._scale])
         self.portals.pad(top, bottom, left, right)
 
+    def crop(self, top, bottom, left, right):
+        self.points -= np.asarray([left*self._scale, top*self._scale])
+        self.portals.crop(top, bottom, left, right)
+
     def fliplr(self, width):
         self.points[:,0] = width*self._scale - self.points[:,0]
         self.portals.fliplr(width)

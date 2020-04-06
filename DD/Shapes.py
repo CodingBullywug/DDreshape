@@ -16,6 +16,9 @@ class Shapes(Entity):
 
     def pad(self, top, bottom, left, right):
         self.polygons = [polygon + [left*self._scale, top*self._scale] for polygon in self.polygons]
+
+    def crop(self, top, bottom, left, right):
+        self.polygons = [polygon - [left*self._scale, top*self._scale] for polygon in self.polygons]
             
     def fliplr(self, width):
         for polygon in self.polygons:

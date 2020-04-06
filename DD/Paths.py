@@ -20,6 +20,9 @@ class Path(Entity):
     def pad(self, top, bottom, left, right):
         self.position += np.asarray([left*self._scale, top*self._scale])
 
+    def crop(self, top, bottom, left, right):
+        self.position -= np.asarray([left*self._scale, top*self._scale])
+
     def fliplr(self, width):
         self.position[0] = width*self._scale - self.position[0]
         v2 = self._rotate_vector(self.edit_points, self.rotation)

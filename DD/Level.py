@@ -41,6 +41,9 @@ class Level(Entity):
     def pad(self, top, bottom, left, right):
         [entity.pad(top, bottom, left, right) for _, entity in self.entities]
 
+    def crop(self, top, bottom, left, right):
+        [entity.crop(top, bottom, left, right) for _, entity in self.entities]
+
     def fliplr(self, width):
         [entity.fliplr(width) for _, entity in self.entities]
 

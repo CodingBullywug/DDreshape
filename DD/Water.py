@@ -19,6 +19,11 @@ class Puddle(Entity):
         self.polygon += [left*self._scale, top*self._scale]
         for puddle in self.puddles:
             puddle.pad(top, bottom, left, right)
+
+    def crop(self, top, bottom, left, right):
+        self.polygon -= [left*self._scale, top*self._scale]
+        for puddle in self.puddles:
+            puddle.crop(top, bottom, left, right)
     
     def fliplr(self, width):
         self.polygon[:,0] = width*self._scale - self.polygon[:,0]
@@ -53,6 +58,10 @@ class Water(Entity):
     def pad(self, top, bottom, left, right):
         if (self.puddles is not None):
             self.puddles.pad(top, bottom, left, right)
+
+    def crop(self, top, bottom, left, right):
+        if (self.puddles is not None):
+            self.puddles.crop(top, bottom, left, right)
 
     def fliplr(self, width):
         if (self.puddles is not None):

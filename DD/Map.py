@@ -20,6 +20,10 @@ class Map(Entity):
         self.header.pad(top, bottom, left, right)
         self.world.pad(top, bottom, left, right)
 
+    def crop(self, top, bottom, left, right):
+        self.header.crop(top, bottom, left, right)
+        self.world.crop(top, bottom, left, right)
+
     def fliplr(self):
         self.header.fliplr(self.world.width)
         self.world.fliplr(self.world.width)

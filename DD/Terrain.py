@@ -3,11 +3,11 @@ from DD.Entity import Entity
 import numpy as np
 
 class Terrain(Entity):
-    def __init__(self, json, width, height, cell_res=[4, 4], terrain_types=4):
+    def __init__(self, json, width, height, scale=4, terrain_types=4):
         super(Terrain, self).__init__(json)
-        self.cell_res = cell_res
+        self._scale = scale
         self.terrain_types = terrain_types
-        self.splat = PoolByteArray2NumpyArray(self._json['splat']).reshape(height*self.cell_res[1], width*self.cell_res[1], self.terrain_types, order='C')
+        self.splat = PoolByteArray2NumpyArray(self._json['splat']).reshape(height*self._scale, width*self._scale, self.terrain_types, order='C')
 
     def get_json(self):
         json = self._json
@@ -16,8 +16,11 @@ class Terrain(Entity):
 
     def pad(self, top, bottom, left, right):
         self.splat = np.pad(self.splat, 
-                            ((top*self.cell_res[0], bottom*self.cell_res[0]), (left*self.cell_res[1], right*self.cell_res[1]), (0,0)),
+                            ((top*self._scale, bottom*self._scale), (left*self._scale, right*self._scale), (0,0)),
                             mode='edge')
+
+    def crop(self, top, bottom, left, right):
+        self.splat = self.splat[top*self._scale:-bottom*self._scale,left*self._scale:-right*self._scale,:]
     
     def fliplr(self, width):
         self.splat = np.fliplr(self.splat)

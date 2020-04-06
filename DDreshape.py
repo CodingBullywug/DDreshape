@@ -7,13 +7,13 @@ from DD import Map
 
 import matplotlib.pyplot as plt
 
-def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0], fliplr=False, flipud=False, rot90=False, rot180=False, rot270=False, transpose=False):
+def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0], crop=[0, 0, 0, 0], fliplr=False, flipud=False, rot90=False, rot180=False, rot270=False, transpose=False):
     print('Input file: ', map_name)
     with open(map_name) as fob:
         map_json = json.load(fob)
     print('Map size (width * height): ',map_json['world']['width'], '*', map_json['world']['height'])
 
-    map_name_out = ''.join(map_name.split('.')[0:-1])
+    map_name_out = ''.join(map_name.split('.')[0:-1]) + '__DDreshape'
 
     # Read map
     DDmap = Map.Map(map_json)
@@ -22,15 +22,20 @@ def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0], fliplr=False, flipud=Fa
     if (any(pad)):
         pad_top, pad_bottom, pad_left, pad_right = pad
         DDmap.pad(pad_top, pad_bottom, pad_left, pad_right)
-        map_name_out += '__padded_' + str(pad_top) + '_' + str(pad_bottom) + '_' + str(pad_left) + '_' + str(pad_right)
+        map_name_out += '__pad_' + str(pad_top) + '_' + str(pad_bottom) + '_' + str(pad_left) + '_' + str(pad_right)
+
+    if (any(crop)):
+        crop_top, crop_bottom, crop_left, crop_right = crop
+        DDmap.crop(crop_top, crop_bottom, crop_left, crop_right)
+        map_name_out += '__crop_' + str(crop_top) + '_' + str(crop_bottom) + '_' + str(crop_left) + '_' + str(crop_right)
 
     if (fliplr):
         DDmap.fliplr()
-        map_name_out += '__flipped_lr'
+        map_name_out += '__flip_lr'
 
     if (flipud):
         DDmap.flipud()
-        map_name_out += '__flipped_ud'
+        map_name_out += '__flip_ud'
 
     if (rot90):
         DDmap.rot90()
@@ -46,7 +51,7 @@ def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0], fliplr=False, flipud=Fa
 
     if (transpose):
         DDmap.transpose()
-        map_name_out += '__transposed'
+        map_name_out += '__transpose'
 
     # Convert transformed map to json
     new_map_json = DDmap.get_json()
@@ -70,6 +75,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser("Reshape a DungeonDraft map.")
     parser.add_argument('map', help='Path to DungeonDraft map file.')
     parser.add_argument('--pad', nargs=4, type=int, default=[0, 0, 0, 0], help='Number of tiles to add as padding to the map. (Default: %(default) s, type: %(type)s).', metavar=('top','bottom','left','right'))
+    parser.add_argument('--crop', nargs=4, type=int, default=[0, 0, 0, 0], help='Number of tiles to remove from the map. (Default: %(default) s, type: %(type)s).', metavar=('top','bottom','left','right'))
     parser.add_argument('--fliplr', action="store_true", help='Flip the left and right hand sides of the map. (Default: %(default) s)')
     parser.add_argument('--flipud', action="store_true", help='Flip the top and bottom of the map. (Default: %(default) s)')
     parser.add_argument('--rot90', action="store_true", help='Rotate map 90 degrees counter-clockwise. (Default: %(default) s)')
@@ -82,4 +88,4 @@ if __name__ == "__main__":
     print('Parsed arguments:')
     print(args)
 
-    reshape_dungeondraft_map(map_name=args.map, pad=args.pad, fliplr=args.fliplr, flipud=args.flipud, rot90=args.rot90, rot180=args.rot180, rot270=args.rot270, transpose=args.transpose)
+    reshape_dungeondraft_map(map_name=args.map, pad=args.pad, crop=args.crop, fliplr=args.fliplr, flipud=args.flipud, rot90=args.rot90, rot180=args.rot180, rot270=args.rot270, transpose=args.transpose)

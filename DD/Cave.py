@@ -6,11 +6,11 @@ class Cave(Entity):
     def __init__(self, json, width, height, scale=4, padding=1):
         super(Cave, self).__init__(json)
         
-        self.scale = scale
+        self._scale = scale
         self.padding = padding
 
-        bitmap_width = width*self.scale+2*self.padding+1
-        bitmap_height = height*self.scale+2*self.padding+1
+        bitmap_width = width*self._scale+2*self.padding+1
+        bitmap_height = height*self._scale+2*self.padding+1
 
         bytemap = PoolByteArray2NumpyArray(self._json['bitmap'])
         self.bitmap = NumpyByteArray2NumpyBitArray(bytemap, bitmap_width, bitmap_height)
@@ -21,7 +21,10 @@ class Cave(Entity):
         return json
 
     def pad(self, top, bottom, left, right):
-        self.bitmap = np.pad(self.bitmap, ((top*self.scale, bottom*self.scale), (left*self.scale, right*self.scale)), mode='constant', constant_values=0)
+        self.bitmap = np.pad(self.bitmap, ((top*self._scale, bottom*self._scale), (left*self._scale, right*self._scale)), mode='constant', constant_values=0)
+
+    def crop(self, top, bottom, left, right):
+        self.bitmap = self.bitmap[top*self._scale:-bottom*self._scale,left*self._scale:-right*self._scale]
 
     def fliplr(self, width):
         self.bitmap = np.fliplr(self.bitmap)

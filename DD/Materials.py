@@ -6,11 +6,11 @@ class Material(Entity):
     def __init__(self, json, width, height, scale=2, padding=1):
         super(Material, self).__init__(json)
 
-        self.scale = scale
+        self._scale = scale
         self.padding = padding
 
-        bitmap_width = width*self.scale+2*self.padding+1
-        bitmap_height = height*self.scale+2*self.padding+1
+        bitmap_width = width*self._scale+2*self.padding+1
+        bitmap_height = height*self._scale+2*self.padding+1
 
         bytemap = PoolByteArray2NumpyArray(self._json['bitmap'])
         self.bitmap = NumpyByteArray2NumpyBitArray(bytemap, bitmap_width, bitmap_height)
@@ -21,7 +21,10 @@ class Material(Entity):
         return json
 
     def pad(self, top, bottom, left, right):
-        self.bitmap = np.pad(self.bitmap, ((top*self.scale, bottom*self.scale), (left*self.scale, right*self.scale)), mode='constant', constant_values=0)
+        self.bitmap = np.pad(self.bitmap, ((top*self._scale, bottom*self._scale), (left*self._scale, right*self._scale)), mode='constant', constant_values=0)
+
+    def crop(self, top, bottom, left, right):
+        self.bitmap = self.bitmap[top*self._scale:-bottom*self._scale,left*self._scale:-right*self._scale]
 
     def fliplr(self, width):
         self.bitmap = np.fliplr(self.bitmap)
@@ -44,10 +47,10 @@ class Material(Entity):
 class Materials(Entity):
     def __init__(self, json, width, height, scale=2):
         super(Materials, self).__init__(json)
-        self.scale = scale
+        self._scale = scale
         self.layers = [key for key in self._json]
-        self.materials = [[Material(material_json, width, height, scale=self.scale) for material_json in self._json[key]] for key in self._json]
-        # self.materials = [Material(material_json, width, height, scale=self.scale) for material_json in self._json]
+        self.materials = [[Material(material_json, width, height, scale=self._scale) for material_json in self._json[key]] for key in self._json]
+        # self.materials = [Material(material_json, width, height, scale=self._scale) for material_json in self._json]
 
     def get_json(self):
         json = self._json

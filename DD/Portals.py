@@ -26,6 +26,9 @@ class Portal(Entity):
     def pad(self, top, bottom, left, right):
         self.position += np.asarray([left*self._scale, top*self._scale])
 
+    def crop(self, top, bottom, left, right):
+        self.position -= np.asarray([left*self._scale, top*self._scale])
+
     def fliplr(self, width):
         self.position[0] = width*self._scale - self.position[0]
         self.rotation = np.pi - self.rotation
@@ -58,7 +61,7 @@ class Portals(Entity):
     def pad(self, top, bottom, left, right):
         for portal in self.portals:
             portal.pad(top, bottom, left, right)
-
+    
     def crop(self, top, bottom, left, right):
         for portal in self.portals:
             portal.crop(top, bottom, left, right)

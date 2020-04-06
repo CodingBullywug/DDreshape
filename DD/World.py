@@ -27,6 +27,14 @@ class World(Entity):
         for level in self.levels:
             level.pad(top, bottom, left, right)
 
+    def crop(self, top, bottom, left, right):
+
+        self.width -= left+right
+        self.height -= top+bottom
+
+        for level in self.levels:
+            level.crop(top, bottom, left, right)
+
     def fliplr(self, width):
         for level in self.levels:
             level.fliplr(self.width)
