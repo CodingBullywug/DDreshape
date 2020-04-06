@@ -24,7 +24,8 @@ class Material(Entity):
         self.bitmap = np.pad(self.bitmap, ((top*self._scale, bottom*self._scale), (left*self._scale, right*self._scale)), mode='constant', constant_values=0)
 
     def crop(self, top, bottom, left, right):
-        self.bitmap = self.bitmap[top*self._scale:-bottom*self._scale,left*self._scale:-right*self._scale]
+        # self.bitmap = self.bitmap[top*self._scale:-bottom*self._scale,left*self._scale:-right*self._scale]
+        self.bitmap = self._crop_map_safe(self.bitmap, top, bottom, left, right, self._scale)
 
     def fliplr(self, width):
         self.bitmap = np.fliplr(self.bitmap)

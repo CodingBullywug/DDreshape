@@ -42,14 +42,17 @@ class Entity(object):
     def rotate(self, angle, width, height):
         raise NotImplementedError('Rotation has not yet been implemented for ' + type(self).__name__ + '.')
 
-    def _rot90_map(self, map):
-       return np.rot90(map, k=1)
+    def _crop_map_safe(self, bmap, top, bottom, left, right, scale=1):
+        return bmap[top*scale:bmap.shape[0]-bottom*scale,left*scale:bmap.shape[1]-right*scale]
 
-    def _rot180_map(self, map):
-        return np.rot90(map, k=2)
+    def _rot90_map(self, bmap):
+       return np.rot90(bmap, k=1)
 
-    def _rot270_map(self, map):
-        return np.rot90(map, k=3)
+    def _rot180_map(self, bmap):
+        return np.rot90(bmap, k=2)
+
+    def _rot270_map(self, bmap):
+        return np.rot90(bmap, k=3)
 
     def _rot90_point(self, point, scale, width, height):
         _point = copy.deepcopy(point)

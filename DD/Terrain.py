@@ -20,7 +20,8 @@ class Terrain(Entity):
                             mode='edge')
 
     def crop(self, top, bottom, left, right):
-        self.splat = self.splat[top*self._scale:-bottom*self._scale,left*self._scale:-right*self._scale,:]
+        # self.splat = self.splat[top*self._scale:-bottom*self._scale,left*self._scale:-right*self._scale,:]
+        self.splat = self._crop_map_safe(self.splat, top, bottom, left, right, self._scale)
     
     def fliplr(self, width):
         self.splat = np.fliplr(self.splat)
