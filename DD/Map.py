@@ -10,14 +10,20 @@ class Map(Entity):
         self.header = Header(self._json['header'])
         self.world = World(self._json['world'])
 
-        # TODO: Handle header
-
-    def pad(self, top, bottom, left, right):
-        self.header.pad(top, bottom, left, right)
-        self.world.pad(top, bottom, left, right)
-
     def get_json(self):
         json = self._json
         json['header'] = self.header.get_json()
         json['world'] = self.world.get_json()
         return json
+
+    def pad(self, top, bottom, left, right):
+        self.header.pad(top, bottom, left, right)
+        self.world.pad(top, bottom, left, right)
+
+    def fliplr(self):
+        self.header.fliplr(self.world.width)
+        self.world.fliplr()
+
+    def flipud(self):
+        self.header.flipud(self.world.height)
+        self.world.flipud()

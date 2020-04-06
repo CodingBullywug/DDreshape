@@ -16,3 +16,10 @@ class Shapes(Entity):
     def pad(self, top, bottom, left, right):
         self.polygons = [polygon + [left*self.scale, top*self.scale] for polygon in self.polygons]
             
+    def fliplr(self, width):
+        for polygon in self.polygons:
+            polygon[:,0] = width*self.scale - polygon[:,0]
+    
+    def flipud(self, height):
+        for polygon in self.polygons:
+            polygon[:,1] = height*self.scale - polygon[:,1]

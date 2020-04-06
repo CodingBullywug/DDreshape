@@ -24,3 +24,12 @@ class World(Entity):
 
         for level in self.levels:
             level.pad(top, bottom, left, right)
+
+    def fliplr(self):
+        for level in self.levels:
+            level.fliplr(self.width)
+
+    def flipud(self):
+        for level in self.levels:
+            level.flipud(self.height)
+        pass

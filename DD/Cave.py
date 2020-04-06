@@ -22,3 +22,9 @@ class Cave(Entity):
 
     def pad(self, top, bottom, left, right):
         self.bitmap = np.pad(self.bitmap, ((top*self.scale, bottom*self.scale), (left*self.scale, right*self.scale)), mode='constant', constant_values=0)
+
+    def fliplr(self, width):
+        self.bitmap = np.fliplr(self.bitmap)
+    
+    def flipud(self, height):
+        self.bitmap = np.flipud(self.bitmap)

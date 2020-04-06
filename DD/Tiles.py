@@ -13,3 +13,8 @@ class Tiles(Entity):
     def pad(self, top, bottom, left, right):
         self.tiles = np.pad(self.tiles, ((top, bottom), (left, right)), mode='constant', constant_values=-1)
     
+    def fliplr(self, width):
+        self.tiles = np.fliplr(self.tiles)
+    
+    def flipud(self, height):
+        self.tiles = np.flipud(self.tiles)

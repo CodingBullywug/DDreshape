@@ -14,3 +14,9 @@ class Header(Entity):
 
     def pad(self, top, bottom, left, right):
         self.camera_position += [left*self.scale, top*self.scale]
+
+    def fliplr(self, width):
+        self.camera_position[0] = width*self.scale - self.camera_position[0]
+
+    def flipud(self, height):
+        self.camera_position[1] = height*self.scale - self.camera_position[1]

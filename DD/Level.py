@@ -31,14 +31,18 @@ class Level(Entity):
                           ('walls', Walls(self._json['walls'], self.width, self.height)),
                           ('water', Water(self._json['water'], self.width, self.height))]
 
-    def pad(self, top, bottom, left, right):
-        [entity.pad(top, bottom, left, right) for _, entity in self.entities]
-
     def get_json(self):
         json = self._json
 
         for key, entity in self.entities:
             json[key] = entity.get_json() 
         return json
-        
 
+    def pad(self, top, bottom, left, right):
+        [entity.pad(top, bottom, left, right) for _, entity in self.entities]
+
+    def fliplr(self, width):
+        [entity.fliplr(width) for _, entity in self.entities]
+
+    def flipud(self, height):
+        [entity.flipud(height) for _, entity in self.entities]

@@ -19,3 +19,8 @@ class Terrain(Entity):
                             ((top*self.cell_res[0], bottom*self.cell_res[0]), (left*self.cell_res[1], right*self.cell_res[1]), (0,0)),
                             mode='edge')
     
+    def fliplr(self, width):
+        self.splat = np.fliplr(self.splat)
+    
+    def flipud(self, height):
+        self.splat = np.flipud(self.splat)

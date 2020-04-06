@@ -20,6 +20,16 @@ class Path(Entity):
     def pad(self, top, bottom, left, right):
         self.position += np.asarray([left*self.scale, top*self.scale])
 
+    def fliplr(self, width):
+        self.position[0] = width*self.scale - self.position[0]
+        self.edit_points[:,0] = -1*self.edit_points[:,0]
+        pass
+    
+    def flipud(self, height):
+        self.position[1] = height*self.scale - self.position[1]
+        self.edit_points[:,1] = -1*self.edit_points[:,1]
+        pass
+
 class Paths(Entity):
     def __init__(self, json, width, height, scale=256):
         super(Paths, self).__init__(json)
@@ -39,13 +49,13 @@ class Paths(Entity):
         for path in self.paths:
             path.crop(top, bottom, left, right)
 
-    def fliplr(self):
+    def fliplr(self, width):
         for path in self.paths:
-            path.fliplr()
+            path.fliplr(width)
     
-    def flipud(self):
+    def flipud(self, height):
         for path in self.paths:
-            path.flipud()
+            path.flipud(height)
 
     def transpose(self):
         for path in self.paths:

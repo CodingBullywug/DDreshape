@@ -23,6 +23,12 @@ class Material(Entity):
     def pad(self, top, bottom, left, right):
         self.bitmap = np.pad(self.bitmap, ((top*self.scale, bottom*self.scale), (left*self.scale, right*self.scale)), mode='constant', constant_values=0)
 
+    def fliplr(self, width):
+        self.bitmap = np.fliplr(self.bitmap)
+
+    def flipud(self, height):
+        self.bitmap = np.flipud(self.bitmap)
+
 class Materials(Entity):
     def __init__(self, json, width, height, scale=2):
         super(Materials, self).__init__(json)
@@ -46,15 +52,15 @@ class Materials(Entity):
             for material in layer:
                 material.crop(top, bottom, left, right)
 
-    def fliplr(self):
+    def fliplr(self, width):
         for layer in self.materials:
             for material in layer:
-                material.fliplr()
+                material.fliplr(width)
     
-    def flipud(self):
+    def flipud(self, height):
         for layer in self.materials:
             for material in layer:
-                material.flipud()
+                material.flipud(height)
 
     def transpose(self):
         for layer in self.materials:

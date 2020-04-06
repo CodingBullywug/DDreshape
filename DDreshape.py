@@ -7,7 +7,7 @@ from DD import Map
 
 import matplotlib.pyplot as plt
 
-def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0]):
+def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0], fliplr=False, flipud=False):
     print('Input file: ', map_name)
     with open(map_name) as fob:
         map_json = json.load(fob)
@@ -23,6 +23,14 @@ def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0]):
         pad_top, pad_bottom, pad_left, pad_right = pad
         DDmap.pad(pad_top, pad_bottom, pad_left, pad_right)
         map_name_out += '__padded_' + str(pad_top) + '_' + str(pad_bottom) + '_' + str(pad_left) + '_' + str(pad_right)
+
+    if (fliplr):
+        DDmap.fliplr()
+        map_name_out += '__flipped_lr'
+
+    if (flipud):
+        DDmap.flipud()
+        map_name_out += '__flipped_ud'
 
     # Convert transformed map to json
     new_map_json = DDmap.get_json()
@@ -46,12 +54,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser("Reshape a DungeonDraft map.")
     parser.add_argument('map', help='Path to DungeonDraft map file.')
     parser.add_argument('--pad', nargs=4, type=int, default=[0, 0, 0, 0], help='Number of tiles to add as padding to the map. (Default: %(default) s, type: %(type)s).', metavar=('top','bottom','left','right'))
+    parser.add_argument('--fliplr', action="store_true", help='Flip the left and right hand sides of the map. (Default: %(default) s)')
+    parser.add_argument('--flipud', action="store_true", help='Flip the top and bottom of the map. (Default: %(default) s)')
 
     args = parser.parse_args()
 
     print('Parsed arguments:')
     print(args)
 
-    reshape_dungeondraft_map(map_name=args.map, pad=args.pad)
+    reshape_dungeondraft_map(map_name=args.map, pad=args.pad, fliplr=args.fliplr, flipud=args.flipud)
 
     pass

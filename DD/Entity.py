@@ -13,10 +13,10 @@ class Entity(object):
     def crop(self, top, bottom, left, right):
         raise NotImplementedError('Cropping has not yet been implemented for ' + type(self).__name__ + '.')
 
-    def fliplr(self):
+    def fliplr(self, width):
         raise NotImplementedError('Flipping left-right has not yet been implemented for ' + type(self).__name__ + '.')
 
-    def flipud(self):
+    def flipud(self, height):
         raise NotImplementedError('Flipping up-down has not yet been implemented for ' + type(self).__name__ + '.')
 
     def transpose(self):

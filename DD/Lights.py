@@ -16,6 +16,12 @@ class Light(Entity):
     def pad(self, top, bottom, left, right):
         self.position += np.asarray([left*self.scale, top*self.scale])
 
+    def fliplr(self, width):
+        self.position[0] = width*self.scale - self.position[0]
+
+    def flipud(self, height):
+        self.position[1] = height*self.scale - self.position[1]
+
 class Lights(Entity):
     def __init__(self, json, width, height, scale=256):
         super(Lights, self).__init__(json)
@@ -35,13 +41,13 @@ class Lights(Entity):
         for light in self.lights:
             light.crop(top, bottom, left, right)
 
-    def fliplr(self):
+    def fliplr(self, width):
         for light in self.lights:
-            light.fliplr()
+            light.fliplr(width)
     
-    def flipud(self):
+    def flipud(self, height):
         for light in self.lights:
-            light.flipud()
+            light.flipud(height)
 
     def transpose(self):
         for light in self.lights:

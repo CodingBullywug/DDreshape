@@ -20,6 +20,14 @@ class Wall(Entity):
         self.points += np.asarray([left*self.scale, top*self.scale])
         self.portals.pad(top, bottom, left, right)
 
+    def fliplr(self, width):
+        self.points[:,0] = width*self.scale - self.points[:,0]
+        self.portals.fliplr(width)
+    
+    def flipud(self, height):
+        self.points[:,1] = height*self.scale - self.points[:,1]
+        self.portals.flipud(height)
+
 class Walls(Entity):
     def __init__(self, json, width, height, scale=256):
         super(Walls, self).__init__(json)
@@ -39,13 +47,13 @@ class Walls(Entity):
         for wall in self.walls:
             wall.crop(top, bottom, left, right)
 
-    def fliplr(self):
+    def fliplr(self, width):
         for wall in self.walls:
-            wall.fliplr()
+            wall.fliplr(width)
     
-    def flipud(self):
+    def flipud(self, height):
         for wall in self.walls:
-            wall.flipud()
+            wall.flipud(height)
 
     def transpose(self):
         for wall in self.walls:

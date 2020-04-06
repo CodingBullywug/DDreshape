@@ -19,6 +19,16 @@ class Puddle(Entity):
         self.polygon += [left*self.scale, top*self.scale]
         for puddle in self.puddles:
             puddle.pad(top, bottom, left, right)
+    
+    def fliplr(self, width):
+        self.polygon[:,0] = width*self.scale - self.polygon[:,0]
+        for puddle in self.puddles:
+            puddle.fliplr(width)
+    
+    def flipud(self, height):
+        self.polygon[:,1] = height*self.scale - self.polygon[:,1]
+        for puddle in self.puddles:
+            puddle.flipud(height)
 
 class Water(Entity):
     def __init__(self, json, width, height, scale=256):
@@ -38,4 +48,12 @@ class Water(Entity):
     def pad(self, top, bottom, left, right):
         if (self.puddles is not None):
             self.puddles.pad(top, bottom, left, right)
+
+    def fliplr(self, width):
+        if (self.puddles is not None):
+            self.puddles.fliplr(width)
+    
+    def flipud(self, height):
+        if (self.puddles is not None):
+            self.puddles.flipud(height)
             

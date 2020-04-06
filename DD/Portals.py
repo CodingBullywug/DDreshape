@@ -5,7 +5,9 @@ import numpy as np
 class Portal(Entity):
     def __init__(self, json, width, height, scale=256):
         super(Portal, self).__init__(json)
-        self.scale = scale
+        self._scale = scale
+        self.scale = Vector22NumpyArray(self._json['scale'])
+        self.direction = Vector22NumpyArray(self._json['direction'])
         self.rotation = self._json['rotation']
         self.position = Vector22NumpyArray(self._json['position'])
 
@@ -13,16 +15,31 @@ class Portal(Entity):
         json = self._json
         json['rotation'] = self.rotation
         json['position'] = NumpyArray2Vector2(self.position)
+        json['direction'] = NumpyArray2Vector2(self.direction)
+        json['scale'] = NumpyArray2Vector2(self.scale)
+
         return json
 
     def pad(self, top, bottom, left, right):
-        self.position += np.asarray([left*self.scale, top*self.scale])
+        self.position += np.asarray([left*self._scale, top*self._scale])
+
+    def fliplr(self, width):
+        self.position[0] = width*self._scale - self.position[0]
+        # self.scale[0] = -1*self.scale[0]
+        self.rotation = np.mod(np.pi - self.rotation, np.pi)
+        self.scale[1] = -1*self.scale[1]
+    
+    def flipud(self, height):
+        self.direction = -1*self.direction
+        self.position[1] = height*self._scale - self.position[1]
+        self.rotation = -1*self.rotation
+        self.scale[1] = -1*self.scale[1]
 
 class Portals(Entity):
     def __init__(self, json, width, height, scale=256):
         super(Portals, self).__init__(json)
-        self.scale = scale
-        self.portals = [Portal(portal_json, width, height, scale=self.scale) for portal_json in self._json]
+        self._scale = scale
+        self.portals = [Portal(portal_json, width, height, scale=self._scale) for portal_json in self._json]
 
     def get_json(self):
         json = self._json
@@ -37,13 +54,13 @@ class Portals(Entity):
         for portal in self.portals:
             portal.crop(top, bottom, left, right)
 
-    def fliplr(self):
+    def fliplr(self, width):
         for portal in self.portals:
-            portal.fliplr()
+            portal.fliplr(width)
     
-    def flipud(self):
+    def flipud(self, height):
         for portal in self.portals:
-            portal.flipud()
+            portal.flipud(height)
 
     def transpose(self):
         for portal in self.portals:
