@@ -28,3 +28,15 @@ class Cave(Entity):
     
     def flipud(self, height):
         self.bitmap = np.flipud(self.bitmap)
+
+    def rot90(self, width, height):
+        self.bitmap = self._rot90_map(self.bitmap)
+        # self.bitmap = np.rot90(self.bitmap, k=1)
+
+    def rot180(self, width, height):
+        self.bitmap = self._rot180_map(self.bitmap)
+        # self.bitmap = np.rot90(self.bitmap, k=2)
+
+    def rot270(self, width, height):
+        self.bitmap = self._rot270_map(self.bitmap)
+        # self.bitmap = np.rot90(self.bitmap, k=3)

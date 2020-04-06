@@ -30,6 +30,10 @@ class Object(Entity):
         self.scale[1] = -1*self.scale[1]
         self.position[1] = height*self._scale - self.position[1]
 
+    def rot90(self, width, height):
+        self.position = self._rot90_point(self.position, self._scale, width, height)
+        self.rotation = self.rotation - np.pi/2
+
 class Objects(Entity):
     def __init__(self, json, width, height, scale=256):
         super(Objects, self).__init__(json)
@@ -64,4 +68,8 @@ class Objects(Entity):
     def rotate(self, angle):
         for obj in self.objects:
             obj.rotate(angle)
+
+    def rot90(self, width, height):
+        for obj in self.objects:
+            obj.rot90(width, height)
     

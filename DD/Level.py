@@ -46,3 +46,13 @@ class Level(Entity):
 
     def flipud(self, height):
         [entity.flipud(height) for _, entity in self.entities]
+
+    def transpose(self):
+        [entity.transpose() for _, entity in self.entities]
+
+    def rotate(self, angle):
+        [entity.rotate(angle) for _, entity in self.entities]
+
+    def rot90(self, width, height):
+        [entity.rot90(width, height) for _, entity in self.entities]
+

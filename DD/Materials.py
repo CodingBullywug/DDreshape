@@ -29,6 +29,18 @@ class Material(Entity):
     def flipud(self, height):
         self.bitmap = np.flipud(self.bitmap)
 
+    def rot90(self, width, height):
+        self.bitmap = self._rot90_map(self.bitmap)
+        # self.bitmap = np.rot90(self.bitmap, k=1)
+
+    def rot180(self, width, height):
+        self.bitmap = self._rot180_map(self.bitmap)
+        # self.bitmap = np.rot90(self.bitmap, k=2)
+
+    def rot270(self, width, height):
+        self.bitmap = self._rot270_map(self.bitmap)
+        # self.bitmap = np.rot90(self.bitmap, k=3)
+
 class Materials(Entity):
     def __init__(self, json, width, height, scale=2):
         super(Materials, self).__init__(json)
@@ -71,4 +83,18 @@ class Materials(Entity):
         for layer in self.materials:
             for material in layer:
                 material.rotate(angle)
+
+    def rot90(self, width, height):
+        for layer in self.materials:
+            for material in layer:
+                material.rot90(width, height)
     
+    # def rot180(self, width, height):
+    #     for layer in self.materials:
+    #         for material in layer:
+    #             material.rot180(width, height)
+
+    # def rot270(self, width, height):
+    #     for layer in self.materials:
+    #         for material in layer:
+    #             material.rot270(width, height)

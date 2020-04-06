@@ -22,8 +22,24 @@ class Map(Entity):
 
     def fliplr(self):
         self.header.fliplr(self.world.width)
-        self.world.fliplr()
+        self.world.fliplr(self.world.width)
 
     def flipud(self):
         self.header.flipud(self.world.height)
-        self.world.flipud()
+        self.world.flipud(self.world.height)
+    
+    def rot90(self):
+        self.header.rot90(self.world.width, self.world.height)
+        self.world.rot90(self.world.width, self.world.height)
+
+    def rot180(self):
+        self.header.rot180(self.world.width, self.world.height)
+        self.world.rot180(self.world.width, self.world.height)
+
+    def rot270(self):
+        self.header.rot270(self.world.width, self.world.height)
+        self.world.rot270(self.world.width, self.world.height)
+    
+    def transpose(self):
+        self.header.transpose(self.world.width, self.world.height)
+        self.world.transpose(self.world.width, self.world.height)

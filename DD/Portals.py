@@ -1,3 +1,5 @@
+import copy
+
 from DD.utils import Vector22NumpyArray, NumpyArray2Vector2, PoolVector2Array2NumpyArray, NumpyArray2PoolVector2Array
 from DD.Entity import Entity
 import numpy as np
@@ -16,6 +18,7 @@ class Portal(Entity):
         json['rotation'] = self.rotation
         json['position'] = NumpyArray2Vector2(self.position)
         json['direction'] = NumpyArray2Vector2(self.direction)
+        # json['direction'] = NumpyArray2Vector2(np.asarray([np.cos(self.rotation), np.sin(self.rotation)]))
         json['scale'] = NumpyArray2Vector2(self.scale)
 
         return json
@@ -25,15 +28,21 @@ class Portal(Entity):
 
     def fliplr(self, width):
         self.position[0] = width*self._scale - self.position[0]
-        # self.scale[0] = -1*self.scale[0]
-        self.rotation = np.mod(np.pi - self.rotation, np.pi)
+        self.rotation = np.pi - self.rotation
         self.scale[1] = -1*self.scale[1]
+        self.direction = np.asarray([np.cos(self.rotation), np.sin(self.rotation)])
     
     def flipud(self, height):
-        self.direction = -1*self.direction
+        # self.direction = -1*self.direction
         self.position[1] = height*self._scale - self.position[1]
         self.rotation = -1*self.rotation
         self.scale[1] = -1*self.scale[1]
+        self.direction = np.asarray([np.cos(self.rotation), np.sin(self.rotation)])
+
+    def rot90(self, width, height):
+        self.position = self._rot90_point(self.position, self._scale, width, height)
+        self.rotation = self.rotation - np.pi/2
+        self.direction = np.asarray([np.cos(self.rotation), np.sin(self.rotation)])
 
 class Portals(Entity):
     def __init__(self, json, width, height, scale=256):
@@ -69,4 +78,8 @@ class Portals(Entity):
     def rotate(self, angle):
         for portal in self.portals:
             portal.rotate(angle)
+
+    def rot90(self, width, height):
+        for portal in self.portals:
+            portal.rot90(width, height)
     

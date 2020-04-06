@@ -18,3 +18,15 @@ class Tiles(Entity):
     
     def flipud(self, height):
         self.tiles = np.flipud(self.tiles)
+
+    def rot90(self, width, height):
+        self.tiles = self._rot90_map(self.tiles)
+        # self.tiles = np.rot90(self.tiles, k=1)
+
+    def rot180(self, width, height):
+        self.tiles = self._rot180_map(self.tiles)
+        # self.tiles = np.rot90(self.tiles, k=2)
+
+    def rot270(self, width, height):
+        self.tiles = self._rot270_map(self.tiles)
+        # self.tiles = np.rot90(self.tiles, k=3)

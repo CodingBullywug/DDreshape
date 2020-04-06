@@ -20,3 +20,6 @@ class Header(Entity):
 
     def flipud(self, height):
         self.camera_position[1] = height*self.scale - self.camera_position[1]
+
+    def rot90(self, width, height):
+        pass

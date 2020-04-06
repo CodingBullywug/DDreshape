@@ -7,7 +7,7 @@ from DD import Map
 
 import matplotlib.pyplot as plt
 
-def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0], fliplr=False, flipud=False):
+def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0], fliplr=False, flipud=False, rot90=False, rot180=False, rot270=False, transpose=False):
     print('Input file: ', map_name)
     with open(map_name) as fob:
         map_json = json.load(fob)
@@ -31,6 +31,22 @@ def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0], fliplr=False, flipud=Fa
     if (flipud):
         DDmap.flipud()
         map_name_out += '__flipped_ud'
+
+    if (rot90):
+        DDmap.rot90()
+        map_name_out += '__rot90'
+
+    if (rot180):
+        DDmap.rot180()
+        map_name_out += '__rot180'
+
+    if (rot270):
+        DDmap.rot270()
+        map_name_out += '__rot270'
+
+    if (transpose):
+        DDmap.transpose()
+        map_name_out += '__transposed'
 
     # Convert transformed map to json
     new_map_json = DDmap.get_json()
@@ -56,12 +72,14 @@ if __name__ == "__main__":
     parser.add_argument('--pad', nargs=4, type=int, default=[0, 0, 0, 0], help='Number of tiles to add as padding to the map. (Default: %(default) s, type: %(type)s).', metavar=('top','bottom','left','right'))
     parser.add_argument('--fliplr', action="store_true", help='Flip the left and right hand sides of the map. (Default: %(default) s)')
     parser.add_argument('--flipud', action="store_true", help='Flip the top and bottom of the map. (Default: %(default) s)')
+    parser.add_argument('--rot90', action="store_true", help='Rotate map 90 degrees counter-clockwise. (Default: %(default) s)')
+    parser.add_argument('--rot180', action="store_true", help='Rotate map 180 degrees counter-clockwise. (Default: %(default) s)')
+    parser.add_argument('--rot270', action="store_true", help='Rotate map 270 degrees counter-clockwise. (Default: %(default) s)')
+    parser.add_argument('--transpose', action="store_true", help='Flip map along diagonal (top-left to bottom right). (Default: %(default) s)')
 
     args = parser.parse_args()
 
     print('Parsed arguments:')
     print(args)
 
-    reshape_dungeondraft_map(map_name=args.map, pad=args.pad, fliplr=args.fliplr, flipud=args.flipud)
-
-    pass
+    reshape_dungeondraft_map(map_name=args.map, pad=args.pad, fliplr=args.fliplr, flipud=args.flipud, rot90=args.rot90, rot180=args.rot180, rot270=args.rot270, transpose=args.transpose)

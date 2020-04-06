@@ -5,7 +5,7 @@ import numpy as np
 class Puddle(Entity):
     def __init__(self, json, width, height, scale):
         super(Puddle, self).__init__(json)
-        self.scale = scale
+        self._scale = scale
         self.polygon = PoolVector2Array2NumpyArray(self._json['polygon'])
         self.puddles = [Puddle(puddle, width, height, scale) for puddle in self._json['children']]
 
@@ -16,19 +16,24 @@ class Puddle(Entity):
         return json
 
     def pad(self, top, bottom, left, right):
-        self.polygon += [left*self.scale, top*self.scale]
+        self.polygon += [left*self._scale, top*self._scale]
         for puddle in self.puddles:
             puddle.pad(top, bottom, left, right)
     
     def fliplr(self, width):
-        self.polygon[:,0] = width*self.scale - self.polygon[:,0]
+        self.polygon[:,0] = width*self._scale - self.polygon[:,0]
         for puddle in self.puddles:
             puddle.fliplr(width)
     
     def flipud(self, height):
-        self.polygon[:,1] = height*self.scale - self.polygon[:,1]
+        self.polygon[:,1] = height*self._scale - self.polygon[:,1]
         for puddle in self.puddles:
             puddle.flipud(height)
+
+    def rot90(self, width, height):
+        self.polygon = self._rot90_vector(self.polygon, self._scale, width, height)
+        for puddle in self.puddles:
+            puddle.rot90(width, height)
 
 class Water(Entity):
     def __init__(self, json, width, height, scale=256):
@@ -56,4 +61,8 @@ class Water(Entity):
     def flipud(self, height):
         if (self.puddles is not None):
             self.puddles.flipud(height)
+
+    def rot90(self, width, height):
+        if (self.puddles is not None):
+            self.puddles.rot90(width, height)
             

@@ -1,3 +1,5 @@
+import copy
+
 from DD.Entity import Entity
 from DD.Level import Level
 
@@ -25,11 +27,20 @@ class World(Entity):
         for level in self.levels:
             level.pad(top, bottom, left, right)
 
-    def fliplr(self):
+    def fliplr(self, width):
         for level in self.levels:
             level.fliplr(self.width)
 
-    def flipud(self):
+    def flipud(self, height):
         for level in self.levels:
             level.flipud(self.height)
-        pass
+
+    def rot90(self, width, height):
+        for level in self.levels:
+            level.rot90(self.width, self.height)
+
+        new_width = copy.deepcopy(self.height)
+        new_height = copy.deepcopy(self.width)
+
+        self.height = new_height
+        self.width = new_width

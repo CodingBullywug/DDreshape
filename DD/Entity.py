@@ -1,4 +1,5 @@
 import copy
+import numpy as np
 
 class Entity(object):
     def __init__(self, json):
@@ -19,11 +20,49 @@ class Entity(object):
     def flipud(self, height):
         raise NotImplementedError('Flipping up-down has not yet been implemented for ' + type(self).__name__ + '.')
 
-    def transpose(self):
-        raise NotImplementedError('Transposing has not yet been implemented for ' + type(self).__name__ + '.')
+    def rot90(self, width, height):
+        raise NotImplementedError('90 degree rotation has not yet been implemented for ' + type(self).__name__ + '.')
 
-    def rotate(self, angle):
+    def rot180(self, width, height):
+        self.rot90(width, height)
+        self.rot90(width, height)
+    
+    def rot270(self, width, height):
+        self.rot90(width, height)
+        self.rot90(width, height)
+        self.rot90(width, height)
+
+    def transpose(self, width, height, anti=False):
+        self.rot90(width, height)
+        if (anti):
+            self.fliplr(width)
+        else:
+            self.flipud(height)
+
+    def rotate(self, angle, width, height):
         raise NotImplementedError('Rotation has not yet been implemented for ' + type(self).__name__ + '.')
 
+    def _rot90_map(self, map):
+       return np.rot90(map, k=1)
 
-    
+    def _rot180_map(self, map):
+        return np.rot90(map, k=2)
+
+    def _rot270_map(self, map):
+        return np.rot90(map, k=3)
+
+    def _rot90_point(self, point, scale, width, height):
+        _point = copy.deepcopy(point)
+        point[1] = width*scale - point[0]
+        point[0] = _point[1]
+        return point
+
+    def _rot90_vector(self, vector, scale, width, height):
+        _vector = copy.deepcopy(vector)
+        vector[:,1] = width*scale - _vector[:,0]
+        vector[:,0] = _vector[:,1]
+        return vector
+
+    def _rotate_vector(self, vector, angle):
+        R = np.asarray([[np.cos(angle), -np.sin(angle)],[np.sin(angle), np.cos(angle)]])
+        return np.dot(R, vector.T).T

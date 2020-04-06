@@ -5,7 +5,7 @@ import numpy as np
 class Light(Entity):
     def __init__(self, json, width, height, scale=256):
         super(Light, self).__init__(json)
-        self.scale = scale
+        self._scale = scale
         self.position = Vector22NumpyArray(self._json['position'])
 
     def get_json(self):
@@ -14,19 +14,22 @@ class Light(Entity):
         return json
 
     def pad(self, top, bottom, left, right):
-        self.position += np.asarray([left*self.scale, top*self.scale])
+        self.position += np.asarray([left*self._scale, top*self._scale])
 
     def fliplr(self, width):
-        self.position[0] = width*self.scale - self.position[0]
+        self.position[0] = width*self._scale - self.position[0]
 
     def flipud(self, height):
-        self.position[1] = height*self.scale - self.position[1]
+        self.position[1] = height*self._scale - self.position[1]
+
+    def rot90(self, width, height):
+        self.position = self._rot90_point(self.position, self._scale, width, height)
 
 class Lights(Entity):
     def __init__(self, json, width, height, scale=256):
         super(Lights, self).__init__(json)
-        self.scale = scale
-        self.lights = [Light(light_json, width, height, scale=self.scale) for light_json in self._json]
+        self._scale = scale
+        self.lights = [Light(light_json, width, height, scale=self._scale) for light_json in self._json]
 
     def get_json(self):
         json = self._json
@@ -57,3 +60,14 @@ class Lights(Entity):
         for light in self.lights:
             light.rotate(angle)
     
+    def rot90(self, width, height):
+        for light in self.lights:
+            light.rot90(width, height)
+
+    # def rot180(self, width, height):
+    #     for light in self.lights:
+    #         light.rot180(width, height)
+    
+    # def rot270(self, width, height):
+    #     for light in self.lights:
+    #         light.rot270(width, height)
