@@ -24,7 +24,6 @@ class Material(Entity):
         self.bitmap = np.pad(self.bitmap, ((top*self._scale, bottom*self._scale), (left*self._scale, right*self._scale)), mode='constant', constant_values=0)
 
     def crop(self, top, bottom, left, right):
-        # self.bitmap = self.bitmap[top*self._scale:-bottom*self._scale,left*self._scale:-right*self._scale]
         self.bitmap = self._crop_map_safe(self.bitmap, top, bottom, left, right, self._scale)
 
     def fliplr(self, width):
@@ -35,15 +34,12 @@ class Material(Entity):
 
     def rot90(self, width, height):
         self.bitmap = self._rot90_map(self.bitmap)
-        # self.bitmap = np.rot90(self.bitmap, k=1)
 
     def rot180(self, width, height):
         self.bitmap = self._rot180_map(self.bitmap)
-        # self.bitmap = np.rot90(self.bitmap, k=2)
 
     def rot270(self, width, height):
         self.bitmap = self._rot270_map(self.bitmap)
-        # self.bitmap = np.rot90(self.bitmap, k=3)
 
 class Materials(Entity):
     def __init__(self, json, width, height, scale=2):
@@ -51,7 +47,6 @@ class Materials(Entity):
         self._scale = scale
         self.layers = [key for key in self._json]
         self.materials = [[Material(material_json, width, height, scale=self._scale) for material_json in self._json[key]] for key in self._json]
-        # self.materials = [Material(material_json, width, height, scale=self._scale) for material_json in self._json]
 
     def get_json(self):
         json = self._json
@@ -92,13 +87,3 @@ class Materials(Entity):
         for layer in self.materials:
             for material in layer:
                 material.rot90(width, height)
-    
-    # def rot180(self, width, height):
-    #     for layer in self.materials:
-    #         for material in layer:
-    #             material.rot180(width, height)
-
-    # def rot270(self, width, height):
-    #     for layer in self.materials:
-    #         for material in layer:
-    #             material.rot270(width, height)

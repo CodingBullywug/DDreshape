@@ -14,7 +14,6 @@ class Tiles(Entity):
         self.tiles = np.pad(self.tiles, ((top, bottom), (left, right)), mode='constant', constant_values=-1)
 
     def crop(self, top, bottom, left, right):
-        # self.tiles = self.tiles[top:-bottom,left:-right]
         self.tiles = self._crop_map_safe(self.tiles, top, bottom, left, right, 1)
     
     def fliplr(self, width):
@@ -25,12 +24,9 @@ class Tiles(Entity):
 
     def rot90(self, width, height):
         self.tiles = self._rot90_map(self.tiles)
-        # self.tiles = np.rot90(self.tiles, k=1)
 
     def rot180(self, width, height):
         self.tiles = self._rot180_map(self.tiles)
-        # self.tiles = np.rot90(self.tiles, k=2)
 
     def rot270(self, width, height):
         self.tiles = self._rot270_map(self.tiles)
-        # self.tiles = np.rot90(self.tiles, k=3)
