@@ -45,18 +45,21 @@ def NumpyBitArray2NumpyByteArray(np_bit_array):
     np_byte_array = np.asarray([int(''.join(list(row)),2) for row in np_bit_array_flat_padded_flipped.astype(str)])
     return np_byte_array
 
-def reshape_dungeondraft_map(map_name, top=0, bottom=0, left=0, right=0):
+def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0]):
     print('Input file: ', map_name)
     with open(map_name) as fob:
         map_json = json.load(fob)
     print('Map size (width * height): ',map_json['world']['width'], '*', map_json['world']['height'])
-    
-    map_padded_json = pad_map(map_json, top=top, bottom=bottom, left=left, right=right)
 
-    map_name_out = ''.join(map_name.split('.')[0:-1]) + '__padded_' + str(top) + '_' + str(bottom) + '_' + str(left) + '_' + str(right) + '.' + map_name.split('.')[-1]
-    print('Output file: ', map_name_out)
-    with open(map_name_out, 'w') as fob:
-        json.dump(map_padded_json, fob, indent='\t')
+    if (any(pad)):
+        pad_top, pad_bottom, pad_left, pad_right = pad
+        
+        map_padded_json = pad_map(map_json, top=pad_top, bottom=pad_bottom, left=pad_left, right=pad_right)
+
+        map_name_out = ''.join(map_name.split('.')[0:-1]) + '__padded_' + str(pad_top) + '_' + str(pad_bottom) + '_' + str(pad_left) + '_' + str(pad_right) + '.' + map_name.split('.')[-1]
+        print('Output file: ', map_name_out)
+        with open(map_name_out, 'w') as fob:
+            json.dump(map_padded_json, fob, indent='\t')
 
 def pad_map(map_json, top=0, bottom=0, left=0, right=0):
 
@@ -201,16 +204,13 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser("Reshape a DungeonDraft map.")
     parser.add_argument('map', help='Path to DungeonDraft map file.')
-    parser.add_argument('top', nargs='?', type=int, default=0, help='Number of tiles to add to the top of the map (Default: %(default) s, type: %(type)s).')
-    parser.add_argument('bottom', nargs='?', type=int, default=0, help='Number of tiles to add to the bottom of the map (Default: %(default) s, type: %(type)s).')
-    parser.add_argument('left', nargs='?', type=int, default=0, help='Number of tiles to add to the left of the map (Default: %(default) s, type: %(type)s).')
-    parser.add_argument('right', nargs='?', type=int, default=0, help='Number of tiles to add to the right of the map (Default: %(default) s, type: %(type)s).')
+    parser.add_argument('--pad', nargs=4, type=int, default=[0, 0, 0, 0], help='Number of tiles to add as padding to the map. (Default: %(default) s, type: %(type)s).', metavar=('top','bottom','left','right'))
 
     args = parser.parse_args()
 
     print('Parsed arguments:')
     print(args)
 
-    reshape_dungeondraft_map(map_name=args.map, top=args.top, bottom=args.bottom, left=args.left, right=args.right)
+    reshape_dungeondraft_map(map_name=args.map, pad=args.pad)
 
     pass
