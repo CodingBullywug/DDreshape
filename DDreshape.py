@@ -13,15 +13,25 @@ def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0]):
         map_json = json.load(fob)
     print('Map size (width * height): ',map_json['world']['width'], '*', map_json['world']['height'])
 
-    # if (any(pad)):
-    pad_top, pad_bottom, pad_left, pad_right = pad
-    
-    map_padded_json = pad_map(map_json, top=pad_top, bottom=pad_bottom, left=pad_left, right=pad_right)
+    map_name_out = ''.join(map_name.split('.')[0:-1])
 
-    map_name_out = ''.join(map_name.split('.')[0:-1]) + '__padded_' + str(pad_top) + '_' + str(pad_bottom) + '_' + str(pad_left) + '_' + str(pad_right) + '.' + map_name.split('.')[-1]
+    # Read map
+    DDmap = Map.Map(map_json)
+
+    # Apply transformations
+    if (any(pad)):
+        pad_top, pad_bottom, pad_left, pad_right = pad
+        DDmap.pad(pad_top, pad_bottom, pad_left, pad_right)
+        map_name_out += '__padded_' + str(pad_top) + '_' + str(pad_bottom) + '_' + str(pad_left) + '_' + str(pad_right)
+
+    # Convert transformed map to json
+    new_map_json = DDmap.get_json()
+
+    map_name_out += '.' + map_name.split('.')[-1]
     print('Output file: ', map_name_out)
+    print('Map size (width * height): ',new_map_json['world']['width'], '*', new_map_json['world']['height'])
     with open(map_name_out, 'w') as fob:
-        json.dump(map_padded_json, fob, indent='\t')
+        json.dump(new_map_json, fob, indent='\t')
 
 def pad_map(map_json, top=0, bottom=0, left=0, right=0):
 
