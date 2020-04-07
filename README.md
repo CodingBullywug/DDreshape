@@ -6,6 +6,40 @@ The purpose of DDreshape is to fill the gap between current alpha/beta state of 
 
 DDreshape lets you pad, crop, rotate and flip your existing Dungeondraft maps.
 
+# Usage
+## Command line
+```
+usage: Reshape a DungeonDraft map. [-h] [--pad top bottom left right]
+                                   [--crop top bottom left right] [--fliplr]
+                                   [--flipud] [--rot90] [--rot180] [--rot270]
+                                   [--transpose]
+                                   map
+
+positional arguments:
+  map                   Path to DungeonDraft map file.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --pad top bottom left right
+                        Number of tiles to add as padding to the map.
+                        (Default: [0, 0, 0, 0], type: int).
+  --crop top bottom left right
+                        Number of tiles to remove from the map. (Default: [0,
+                        0, 0, 0], type: int).
+  --fliplr              Flip the left and right hand sides of the map.
+                        (Default: False)
+  --flipud              Flip the top and bottom of the map. (Default: False)
+  --rot90               Rotate map 90 degrees counter-clockwise. (Default:
+                        False)
+  --rot180              Rotate map 180 degrees counter-clockwise. (Default:
+                        False)
+  --rot270              Rotate map 270 degrees counter-clockwise. (Default:
+                        False)
+  --transpose           Flip map along diagonal (top-left to bottom right).
+                        (Default: False)
+```
+
+
 # Examples
 |Action|Command|Exported map|
 |---|---|---|
