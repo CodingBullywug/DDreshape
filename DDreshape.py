@@ -62,14 +62,6 @@ def reshape_dungeondraft_map(map_name, pad=[0, 0, 0, 0], crop=[0, 0, 0, 0], flip
     with open(map_name_out, 'w') as fob:
         json.dump(new_map_json, fob, indent='\t')
 
-def pad_map(map_json, top=0, bottom=0, left=0, right=0):
-
-    DDmap = Map.Map(map_json)
-    DDmap.pad(top, bottom, left, right)
-    new_map_json = DDmap.get_json()
-
-    return new_map_json
-
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser("Reshape a DungeonDraft map.")
